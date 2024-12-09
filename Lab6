@@ -1,0 +1,40 @@
+import pickle
+
+
+class CourseGrades:
+    def __init__(self, course_name, stu_ID, stu_grade):
+        self.course_name = course_name
+        self.stu_ID = stu_ID
+        self.stu_grade = stu_grade
+
+    def __str__(self):
+        return f"{self.course_name}: IDs {self.stu_ID}, Grades {self.stu_grade}"
+
+def main():
+    file_name = "grades_info.dat"
+
+    courses = []
+    for i in range(4):
+        print(f"Enter details for Course {i + 1}")
+        course_name = input("Course Name: ")
+        stu_ID = input("Student IDs (comma-separated): ").split(",")
+        stu_grade = list(map(int, input("Grades (comma-separated): ").split(",")))
+        courses.append(CourseGrades(course_name, stu_ID, stu_grade))
+
+    with open(file_name, "ab") as f:
+        for course in courses:
+            pickle.dump(course, f)
+    print("Courses saved!")
+
+    print("\nReading courses from file...")
+    with open(file_name, "rb") as f:
+        while True:
+            try:
+                course = pickle.load(f)
+                print(course)
+            except EOFError:
+                break
+
+
+if __name__ == "__main__":
+    main()
